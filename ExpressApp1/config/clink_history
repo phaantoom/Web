@@ -1,0 +1,4 @@
+|CTAG_1617467580_585610218_2396_0
+npm init -y
+npm i express mysql
+npm i -D nodemon

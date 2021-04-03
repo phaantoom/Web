@@ -2,13 +2,15 @@
 var express = require('express');
 var router = express.Router();
 
-///* GET home page. */
-//router.get('/', function (req, res) {
-//    res.render('index', { title: 'Express' });
-//});
+const db = require("../db/db.js");
+
+/* GET home page. */
+router.get('/', function (req, res) {
+    res.json({ title: 'Express' });
+});
 
 
-app.post('/matchEvent/:Venue/:day/:month/:year/:hour/:minut', (req, res) => {//---------------------------------------------post
+router.post('/matchEvent/:Venue/:day/:month/:year/:hour/:minut', (req, res) => {//---------------------------------------------post
 
     let match = { venue_id: req.params.Venue, match_date: req.params.year + "-" + req.params.month + "-" + req.params.day + " " + req.params.hour + ":" + req.params.minut + ":00" };
     let sql = 'INSERT INTO EPL_match values ?';
@@ -19,7 +21,7 @@ app.post('/matchEvent/:Venue/:day/:month/:year/:hour/:minut', (req, res) => {//-
     });
 });
 
-app.put('/updatematch/:id/:Venue/:day/:month/:year/:hour/:minut', (req, res) => {//---------------------------------------------put
+router.put('/updatematch/:id/:Venue/:day/:month/:year/:hour/:minut', (req, res) => {//---------------------------------------------put
     let match = [req.params.Venue, req.params.year + "-" + req.params.month + "-" + req.params.day + " " + req.params.hour + ":" + req.params.minut + ":00", req.params.id];
     let sql = 'UPDATE EPL_match SET venue_id = ?, match_date = ? WHERE ID = ?';
     let query = db.query(sql, match, (err, result) => {
@@ -29,7 +31,7 @@ app.put('/updatematch/:id/:Venue/:day/:month/:year/:hour/:minut', (req, res) => 
     });
 });
 
-app.post('/matchEventTeamsB/:id/:Team1/:state1/:Team2/:state2', (req, res) => {//---------------------------------------------post
+router.post('/matchEventTeamsB/:id/:Team1/:state1/:Team2/:state2', (req, res) => {//---------------------------------------------post
 
     let match_team = [
         [req.params.Team1, req.params.id, req.params.state1],
@@ -43,7 +45,7 @@ app.post('/matchEventTeamsB/:id/:Team1/:state1/:Team2/:state2', (req, res) => {/
     });
 });
 
-app.put('/updatematchTeamsB/:id/:Team1/:state1/:Team2/:state2', (req, res) => {//---------------------------------------------put
+router.put('/updatematchTeamsB/:id/:Team1/:state1/:Team2/:state2', (req, res) => {//---------------------------------------------put
 
     let match_team = [
         [req.params.Team1, req.params.state1, req.params.id],
@@ -57,7 +59,7 @@ app.put('/updatematchTeamsB/:id/:Team1/:state1/:Team2/:state2', (req, res) => {/
     });
 });
 
-app.post('/matchEventTeams/:Team/:state/:id', (req, res) => {      //---------------------------------------------post
+router.post('/matchEventTeams/:Team/:state/:id', (req, res) => {      //---------------------------------------------post
 
     let match_team = { state: req.params.state, team: req.params.Team, match_id: req.params.id };
     let sql = 'INSERT INTO match_team values ?';
@@ -68,7 +70,7 @@ app.post('/matchEventTeams/:Team/:state/:id', (req, res) => {      //-----------
     });
 });
 
-app.put('/matchEventrefeB/:ref/:id/:line1/:line2', (req, res) => {//---------------------------------------------put
+router.put('/matchEventrefeB/:ref/:id/:line1/:line2', (req, res) => {//---------------------------------------------put
 
     let match_refe = [
         [req.params.ref, req.params.id],
@@ -83,7 +85,7 @@ app.put('/matchEventrefeB/:ref/:id/:line1/:line2', (req, res) => {//------------
     });
 });
 
-app.post('/updatematchrefeB/:ref/:id/:line1/:line2', (req, res) => {//---------------------------------------------post
+router.post('/updatematchrefeB/:ref/:id/:line1/:line2', (req, res) => {//---------------------------------------------post
 
     let match_refe = [
         [req.params.ref, req.params.id],
@@ -98,7 +100,7 @@ app.post('/updatematchrefeB/:ref/:id/:line1/:line2', (req, res) => {//----------
     });
 });
 
-app.post('/matchEventrefe/:ref/:id', (req, res) => {               //---------------------------------------------post
+router.post('/matchEventrefe/:ref/:id', (req, res) => {               //---------------------------------------------post
 
     let match_refe = { refe: req.params.ref, match_id: req.params.id };
     let sql = 'INSERT INTO refe values ?';
@@ -109,7 +111,7 @@ app.post('/matchEventrefe/:ref/:id', (req, res) => {               //-----------
     });
 });
 
-app.post('/addStadium/:loc/:shape/:width/:length', (req, res) => {        //---------------------------------------------post
+router.post('/addStadium/:loc/:shape/:width/:length', (req, res) => {        //---------------------------------------------post
 
     let venue_info = { location: req.params.loc, shape: req.params.shape, width: req.params.width, length: req.params.length };
     let sql = 'INSERT INTO venue values ?';
@@ -120,7 +122,7 @@ app.post('/addStadium/:loc/:shape/:width/:length', (req, res) => {        //----
     });
 });
 
-app.get('/getmatchVenue/:id', (req, res) => {
+router.get('/getmatchVenue/:id', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from EPL_match, venue where EPL_match.venue_id = venue.ID and  EPL_match = ?';
@@ -131,7 +133,7 @@ app.get('/getmatchVenue/:id', (req, res) => {
     });
 });
 
-app.get('/getmatchteams/:id', (req, res) => {
+router.get('/getmatchteams/:id', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from team, match_team where team.ID = match_team.team and  match_id = ?';
@@ -142,7 +144,7 @@ app.get('/getmatchteams/:id', (req, res) => {
     });
 });
 
-app.get('/getmatchrefe/:id', (req, res) => {
+router.get('/getmatchrefe/:id', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from refe, referee where referee.ID = refe.ref and  match_id = ?';
@@ -153,7 +155,7 @@ app.get('/getmatchrefe/:id', (req, res) => {
     });
 });
 
-app.get('/getmatchs', (req, res) => {
+router.get('/getmatchs', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from EPL_match';
@@ -164,7 +166,7 @@ app.get('/getmatchs', (req, res) => {
     });
 });
 
-app.get('/getvenues', (req, res) => {
+router.get('/getvenues', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from venue';
@@ -175,7 +177,7 @@ app.get('/getvenues', (req, res) => {
     });
 });
 
-app.get('/getreferee', (req, res) => {
+router.get('/getreferee', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from referee';
@@ -186,7 +188,7 @@ app.get('/getreferee', (req, res) => {
     });
 });
 
-app.get('/getteam', (req, res) => {
+router.get('/getteam', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from team';
@@ -197,7 +199,7 @@ app.get('/getteam', (req, res) => {
     });
 });
 
-app.get('/getmachSeat/:id', (req, res) => {
+router.get('/getmachSeat/:id', (req, res) => {
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'select* from match_seats where match_id =?';
@@ -208,7 +210,7 @@ app.get('/getmachSeat/:id', (req, res) => {
     });
 });
 
-app.delete('/deleteuser/:id', (req, res) => {               //---------------------------------------------delete
+router.delete('/deleteuser/:id', (req, res) => {               //---------------------------------------------delete
 
     //let venue_info = { location: req.params.loc, shape: req.params.shape, no_seats: req.params.seats };
     let sql = 'delete from app_user where ID =?';
