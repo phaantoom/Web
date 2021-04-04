@@ -65,12 +65,12 @@ create table venue(
 -- );
 
 create table referee(
-	ID integer primary key,
+	ID integer auto_increment primary key,
 	referee_type integer,
 	first_name varchar(255)
 );
 create table EPL_match(
-	ID integer primary key,
+	ID integer auto_increment primary key,
 	venue_id integer,
 	match_date datetime,
 	foreign key(venue_id) references venue(id)
