@@ -387,4 +387,25 @@ router.post('/getusers', (req, res) => {
     });
 });
 
+router.get('/getusertype/:username', (req, res) => {
+    // m match / r ref<->match / re ref / v venue / mt match<->team / t team
+    //select* can be changed to specific requirements
+    let sql = 'SELECT user_type from app_user where user_name = ?';
+    let query = db.query(sql, req.params.username, (err, result) => {
+        if (err) throw err;
+        console.log(result.insertId);
+        res.send(result);
+    });
+});
+
+router.get('/getnonuser', (req, res) => {
+    // m match / r ref<->match / re ref / v venue / mt match<->team / t team
+    //select* can be changed to specific requirements
+    let sql = 'SELECT * from app_user where user_type = 0';
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result.insertId);
+        res.send(result);
+    });
+});
 module.exports = router;
