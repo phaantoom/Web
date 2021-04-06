@@ -408,4 +408,15 @@ router.get('/getnonuser', (req, res) => {
         res.send(result);
     });
 });
+
+router.put('/approve/:user_name', (req, res) => {
+    // m match / r ref<->match / re ref / v venue / mt match<->team / t team
+    //select* can be changed to specific requirements
+    let sql = 'update app_user set user_type = 1 where user_name = ?';
+    let query = db.query(sql, req.params.user_name ,(err, result) => {
+        if (err) throw err;
+        console.log(result.insertId);
+        res.send(result);
+    });
+});
 module.exports = router;
