@@ -378,5 +378,13 @@ router.post('/addteam/:team_name/:team_town', (req, res) => {
     });
 });
 
+router.post('/getusers', (req, res) => {
+    let sql = 'select* from app_user';
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result.insertId);
+        res.send(result);
+    });
+});
 
 module.exports = router;
